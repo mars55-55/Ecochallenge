@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;       
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class User extends Authenticatable
 {
@@ -45,5 +48,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function challenges()
+    {
+        return $this->belongsToMany(Challenge::class)
+            ->withPivot('assigned_at', 'completed_at')
+            ->withTimestamps();
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+    public function metrics()
+    {
+        return $this->hasMany(\App\Models\UserMetric::class);
     }
 }

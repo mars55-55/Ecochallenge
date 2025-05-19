@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('eco_preferences')->nullable(); // preferencias ecológicas
+            $table->string('role')->default('user'); // valores: 'user', 'admin'
             $table->rememberToken();
             $table->timestamps();
         });

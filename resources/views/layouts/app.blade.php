@@ -83,8 +83,21 @@
         </header>
     @endisset
 
-    <main></main>
-        {{ $slot }}
+    <main>
+        @yield('content')
+
+        @if(session('success'))
+            @php
+                $success = session('success');
+                $title = is_array($success) && isset($success['title']) ? $success['title'] : '¡Éxito!';
+                $message = is_array($success) && isset($success['message']) ? $success['message'] : $success;
+            @endphp
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <strong><i class="bi bi-check-circle-fill"></i> {{ $title }}</strong><br>
+                <span>{{ $message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        @endif
     </main>
     <footer class="text-center text-muted py-3 mt-5 border-top">
         &copy; {{ date('Y') }} EcoChallenge. Todos los derechos reservados.

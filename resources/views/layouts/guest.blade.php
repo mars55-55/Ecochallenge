@@ -48,17 +48,25 @@
     </style>
 </head>
 <body>
-    <nav class="navbar eco-navbar mb-3">
+    <nav class="navbar eco-navbar mb-3 shadow-sm sticky-top">
         <div class="container d-flex justify-content-between align-items-center py-2">
-            <a class="eco-logo" href="#">
+            <a href="/" class="eco-logo">
                 <i class="bi bi-leaf-fill"></i>
                 EcoChallenge
             </a>
-            <a href="{{ route('register') }}" class="eco-btn">Registrarse</a>
+            <div class="d-flex align-items-center gap-2">
+                @guest
+                    <a href="{{ route('register') }}" class="eco-btn">Registrarse</a>
+                    <a href="{{ route('login') }}" class="eco-btn ms-2">Iniciar Sesión</a>
+                @endguest
+                @auth
+                    <a href="{{ route('dashboard') }}" class="eco-btn">Ir al Panel</a>
+                @endauth
+            </div>
         </div>
     </nav>
     <main>
-        {{ $slot }}
+        @yield('content')
     </main>
     <footer class="text-center text-muted py-3 mt-5 border-top">
         &copy; {{ date('Y') }} EcoChallenge. Todos los derechos reservados.

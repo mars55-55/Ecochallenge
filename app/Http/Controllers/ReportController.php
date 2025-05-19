@@ -17,22 +17,36 @@ class ReportController extends Controller
 {
     public function store(Request $request, Topic $topic)
     {
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
         Report::create([
             'user_id' => Auth::id(),
             'topic_id' => $topic->id,
-            'reason' => $request->input('reason', 'Contenido inapropiado'),
+            'reason' => $request->input('reason'),
         ]);
-        return back()->with('success', 'Tema reportado.');
+        return back()->with('success', [
+            'title' => 'Reporte enviado',
+            'message' => 'El tema fue reportado y será revisado por el equipo de administración.',
+            'type' => 'info',
+        ]);
     }
 
     public function storeComment(Request $request, Comment $comment)
     {
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
         Report::create([
             'user_id' => Auth::id(),
             'comment_id' => $comment->id,
-            'reason' => $request->input('reason', 'Contenido inapropiado'),
+            'reason' => $request->input('reason'),
         ]);
-        return back()->with('success', 'Comentario reportado.');
+        return back()->with('success', [
+            'title' => 'Reporte enviado',
+            'message' => 'El comentario fue reportado y será revisado por el equipo de administración.',
+            'type' => 'info',
+        ]);
     }
 
     public function generateUserReport(User $user)

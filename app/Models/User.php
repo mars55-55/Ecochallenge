@@ -24,7 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-         'eco_preferences', // preferencias ecológicas
+        'eco_preferences',
+        'role', // <-- agregado para roles
     ];
 
     /**

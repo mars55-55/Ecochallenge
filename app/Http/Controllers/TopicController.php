@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Topic;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,5 +40,19 @@ class TopicController extends Controller
     {
         $topic->load(['user', 'comments.user']);
         return view('forum.show', compact('topic'));
+    }
+
+    // Solo admin puede eliminar temas
+    public function destroy(Topic $topic)
+    {
+        $topic->delete();
+        return redirect()->route('topics.index')->with('success', 'Tema eliminado correctamente.');
+    }
+
+    // Eliminar comentario solo para admin
+    public function destroyComment(Comment $comment)
+    {
+        $comment->delete();
+        return back()->with('success', 'Comentario eliminado correctamente.');
     }
 }

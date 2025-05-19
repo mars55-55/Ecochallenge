@@ -1,4 +1,5 @@
-<x-guest-layout>
+@extends('layouts.guest')
+@section('content')
     <style>
         .eco-btn {
             font-size: 1rem;
@@ -10,12 +11,8 @@
             background: #fff;
             color: #21a038;
             box-shadow: 0 2px 8px rgba(33,160,56,0.08);
-            transition: 
-                background 0.16s,
-                color 0.16s,
-                box-shadow 0.16s,
-                transform 0.13s;
-            text-decoration: none; /* Quita la subrayado */
+            transition: background 0.16s, color 0.16s, box-shadow 0.16s, transform 0.13s;
+            text-decoration: none;
         }
         .eco-btn-success {
             background: #21a038;
@@ -26,7 +23,7 @@
             color: #fff;
             box-shadow: 0 4px 16px rgba(33,160,56,0.13);
             transform: translateY(-2px) scale(1.03);
-            text-decoration: none; /* Quita la subrayado en hover */
+            text-decoration: none;
         }
         .eco-btn-primary {
             background: #11998e;
@@ -37,7 +34,7 @@
             color: #fff;
             box-shadow: 0 4px 16px rgba(17,153,142,0.13);
             transform: translateY(-2px) scale(1.03);
-            text-decoration: none; /* Quita la subrayado en hover */
+            text-decoration: none;
         }
         .eco-btn:active {
             transform: scale(0.97);
@@ -59,10 +56,13 @@
     <div class="container py-5">
         <h1 class="text-center mb-4 fw-bold">Bienvenidos a Ecochallenge</h1>
         <div class="d-flex justify-content-center gap-3 mb-5">
-            <a href="{{ route('register') }}" class="eco-btn eco-btn-success">Registrarse</a>
-            <a href="{{ route('login') }}" class="eco-btn eco-btn-primary">Iniciar Sesión</a>
+            @if (Auth::check())
+                <a href="{{ route('dashboard') }}" class="eco-btn eco-btn-success">Ir al Panel</a>
+            @else
+                <a href="{{ route('login') }}" class="eco-btn eco-btn-primary">Iniciar Sesión</a>
+                <a href="{{ route('register') }}" class="eco-btn eco-btn-success">Registrarse</a>
+            @endif
         </div>
-
         <div class="row text-center mb-5">
             <div class="col-md-4 mb-3">
                 <div class="eco-icon">
@@ -86,9 +86,7 @@
                 <p class="text-muted">Colaboración, compromiso y respeto ambiental.</p>
             </div>
         </div>
-
         <h2 class="text-center mb-4 fs-4">¿Por qué Elegir Ecochallenge?</h2>
-
         <section class="eco-section mb-5">
             <h3 class="fs-5 fw-bold mb-2">¿Qué es EcoChallenge?</h3>
             <p class="mb-2">
@@ -100,7 +98,6 @@
                 <li>Colabora y aprende junto a una comunidad activa.</li>
             </ul>
         </section>
-
         <section class="eco-section mb-5">
             <h3 class="fs-5 fw-bold mb-2">¿Cómo funciona?</h3>
             <div class="row text-center">
@@ -118,11 +115,15 @@
                 </div>
             </div>
         </section>
-
         <section class="eco-section text-center">
             <h3 class="fs-5 fw-bold mb-2">Únete a la comunidad EcoChallenge</h3>
             <p class="mb-3">Miles de personas ya están cambiando el mundo, un reto a la vez. ¡Súmate y haz la diferencia!</p>
-            <a href="{{ route('register') }}" class="eco-btn eco-btn-success">Quiero ser parte</a>
+            @if (Auth::check())
+                <a href="{{ route('dashboard') }}" class="eco-btn eco-btn-success">Ir al Panel</a>
+            @else
+                <a href="{{ route('register') }}" class="eco-btn eco-btn-success">Quiero ser parte</a>
+                <a href="{{ route('login') }}" class="eco-btn eco-btn-primary ms-2">Iniciar Sesión</a>
+            @endif
         </section>
     </div>
-</x-guest-layout>
+@endsection

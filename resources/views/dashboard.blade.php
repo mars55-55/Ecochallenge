@@ -40,11 +40,24 @@
                                 </a>
                             @endif
                         </div>
+                        <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
+                            <a href="{{ route('survey.create') }}" class="btn btn-outline-primary rounded-pill shadow-sm">
+                                <i class="bi bi-ui-checks-grid"></i> Crear/Editar Encuesta
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- Puedes agregar más tarjetas aquí si lo deseas -->
         </div>
+        <!-- Notificación visual de reportes pendientes -->
+        @php $pendingReports = \App\Models\Report::count(); @endphp
+        @if($pendingReports > 0)
+            <div class="alert alert-warning text-center rounded-4 shadow-sm mb-4">
+                <i class="bi bi-flag"></i> Hay <strong>{{ $pendingReports }}</strong> reportes pendientes de revisión.
+                <a href="{{ route('admin.reports') }}" class="btn btn-sm btn-outline-danger rounded-pill ms-2">Revisar reportes</a>
+            </div>
+        @endif
     @else
         <div class="alert alert-success text-center rounded-4 shadow-sm mb-4">
             <i class="bi bi-people-fill"></i> <strong>¡Gracias por ser parte de EcoChallenge!</strong> Cada reto que completas y cada acción que tomas suma para un planeta mejor. ¡Sigue inspirando a otros!

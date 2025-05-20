@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('content')
 <div class="container py-5">
+    <div class="mb-4">
+        <a href="{{ route('habit_evaluation.form') }}" class="btn btn-outline-secondary btn-sm rounded-pill shadow-sm">
+            <i class="bi bi-arrow-left"></i> Volver a la evaluación
+        </a>
+    </div>
     <div class="row justify-content-center">
         <div class="col-lg-7">
             <div class="card shadow border-0 rounded-4">

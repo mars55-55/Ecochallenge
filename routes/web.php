@@ -49,6 +49,10 @@ Route::middleware(['auth'])->group(function () {
     // Evaluación de hábitos
     Route::get('habit-evaluation', [HabitEvaluationController::class, 'form'])->name('habit_evaluation.form');
     Route::post('habit-evaluation', [HabitEvaluationController::class, 'submit'])->name('habit_evaluation.submit');
+    Route::get('habit-evaluation/result', function() {
+        $carbon = request('carbon', 0);
+        return view('habit_evaluations.result', compact('carbon'));
+    })->name('habit_evaluation.result');
     // Métricas y análisis
     Route::get('metrics/history', [UserMetricController::class, 'history'])->name('metrics.history');
     Route::get('analysis', [AnalysisController::class, 'index'])->name('analysis.index');
@@ -58,8 +62,8 @@ Route::middleware(['auth'])->group(function () {
 // Panel admin (solo para administradores)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin', [AdminPanelController::class, 'index'])->name('admin.index');
+    Route::get('admin/reports', [ReportController::class, 'index'])->name('admin.reports');
     Route::get('admin/reports/{user}', [ReportController::class, 'generateUserReport'])->name('admin.report.user');
-    Route::get('admin/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.reports');
     Route::get('admin/users', [AdminPanelController::class, 'users'])->name('admin.users');
     // Acciones de administración de retos
     Route::resource('challenges', ChallengeController::class)->except(['index', 'show']);
@@ -67,6 +71,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Eliminar temas y comentarios solo admin
     Route::delete('topics/{topic}', [TopicController::class, 'destroy'])->name('topics.destroy');
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    // Encuestas - Admin
+    Route::get('admin/surveys/create', [\App\Http\Controllers\SurveyController::class, 'create'])->name('survey.create');
+    Route::post('admin/surveys', [\App\Http\Controllers\SurveyController::class, 'store'])->name('survey.store');
 });
 
 require __DIR__.'/auth.php';

@@ -112,4 +112,11 @@ class ReportController extends Controller
 
         return $pdf->download('mi_reporte_ecologico.pdf');
     }
+
+    // Mostrar reportes para el admin
+    public function index()
+    {
+        $reports = \App\Models\Report::with(['user', 'comment'])->latest()->get();
+        return view('admin.reports', compact('reports'));
+    }
 }

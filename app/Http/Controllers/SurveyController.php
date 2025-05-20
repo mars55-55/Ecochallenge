@@ -23,4 +23,32 @@ class SurveyController extends Controller
         ]);
         return view('surveys.thanks');
     }
+
+    public function create() {
+        return view('surveys.admin_form');
+    }
+
+    public function store(Request $request) {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'questions' => 'required|array',
+            'questions.*.text' => 'required|string',
+            'questions.*.type' => 'required|string',
+        ]);
+        // Procesar opciones para preguntas tipo select
+        foreach ($data['questions'] as &$q) {
+            if ($q['type'] === 'select' && isset($q['options'])) {
+                $q['options'] = array_map('trim', explode(',', $q['options']));
+            } else {
+                unset($q['options']);
+            }
+        }
+        Survey::create([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'questions' => $data['questions'],
+        ]);
+        return redirect()->route('dashboard')->with('success', 'Encuesta creada correctamente.');
+    }
 }

@@ -15,6 +15,16 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+    public function metrics()
+    {
+        return $this->hasMany(\App\Models\UserMetric::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -58,12 +68,5 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
-    public function metrics()
-    {
-        return $this->hasMany(\App\Models\UserMetric::class);
-    }
+    
 }

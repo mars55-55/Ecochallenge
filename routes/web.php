@@ -16,6 +16,8 @@ use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\AnalysisController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -62,6 +64,10 @@ Route::middleware(['auth'])->group(function () {
 // Panel admin (solo para administradores)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin', [AdminPanelController::class, 'index'])->name('admin.index');
+    
+});
+// Rutas autenticadas para administradores  
+Route::middleware(['auth'])->group(function () {
     Route::get('admin/reports', [ReportController::class, 'index'])->name('admin.reports');
     Route::get('admin/reports/{user}', [ReportController::class, 'generateUserReport'])->name('admin.report.user');
     Route::get('admin/users', [AdminPanelController::class, 'users'])->name('admin.users');

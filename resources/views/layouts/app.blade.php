@@ -66,10 +66,16 @@
                 <i class="bi bi-leaf-fill"></i>
                 EcoChallenge
             </a>
-            <form action="{{ route('logout') }}" method="POST" class="mb-0">
-                @csrf
-                <button type="submit" class="btn btn-outline-light rounded-pill px-4">Cerrar sesión</button>
-            </form>
+            <div class="d-flex align-items-center gap-2">
+                {{-- Enlace al perfil --}}
+                <a href="{{ route('profile.edit') }}" class="btn btn-outline-light rounded-pill px-4">
+                    <i class="bi bi-person-circle"></i> Perfil
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="mb-0 ms-2">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-light rounded-pill px-4">Cerrar sesión</button>
+                </form>
+            </div>
         </div>
     </nav>
     @isset($header)

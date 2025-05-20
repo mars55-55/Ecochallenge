@@ -6,7 +6,7 @@
         <a href="/" class="btn btn-outline-secondary rounded-pill"><i class="bi bi-house-door"></i> Volver a inicio</a>
     </div>
     @php $user = Auth::user(); @endphp
-    @if($user && method_exists($user, 'isAdmin') && $user->isAdmin())
+    @if($user && $user->isAdmin())
         <div class="alert alert-info text-center rounded-4 shadow-sm mb-4">
             <i class="bi bi-stars"></i> <strong>¡Bienvenido, Administrador!</strong> Tu liderazgo impulsa el cambio sostenible en toda la comunidad. Gestiona, inspira y haz crecer el impacto ecológico.
         </div>
@@ -30,28 +30,20 @@
                         </ul>
                         <div class="d-flex flex-wrap gap-2 justify-content-center">
                             <a href="{{ route('challenges.index') }}" class="btn btn-primary rounded-pill shadow-sm">Gestionar Retos</a>
-                            <a href="{{ route('admin.index') }}" class="btn btn-outline-primary rounded-pill shadow-sm">Panel Admin</a>
-                            <a href="{{ route('survey.form') }}" class="btn btn-outline-success rounded-pill shadow-sm">Ver Encuestas</a>
+                            <a href="{{ route('topics.index') }}" class="btn btn-outline-primary rounded-pill shadow-sm">Gestionar Publicaciones</a>
+                            <a href="{{ route('survey.form') }}" class="btn btn-outline-success rounded-pill shadow-sm">Gestionar Formularios</a>
+                            <a href="{{ route('admin.reports') }}" class="btn btn-outline-info rounded-pill shadow-sm">Gestionar Reportes</a>
+                            <a href="{{ route('admin.users') }}" class="btn btn-outline-warning rounded-pill shadow-sm">Gestionar Usuarios</a>
+                            @if(auth()->user() && auth()->user()->isAdmin())
+                                <a href="{{ route('challenges.create') }}" class="btn btn-success rounded-pill">
+                                    <i class="bi bi-plus-circle"></i> Crear reto
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card shadow border-0 rounded-4 h-100">
-                    <div class="card-body p-4">
-                        <h4 class="mb-3 text-primary fw-semibold text-center">Foro de la Comunidad</h4>
-                        <p class="mb-3 text-center">Publica temas, responde a otros usuarios y participa en debates ecológicos.</p>
-                        <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
-                            <a href="{{ route('topics.index') }}" class="btn btn-outline-success rounded-pill">
-                                <i class="bi bi-arrow-right-circle"></i> Ir al Foro
-                            </a>
-                            <a href="{{ route('topics.create') }}" class="btn btn-success rounded-pill">
-                                <i class="bi bi-plus-circle"></i> Nuevo Tema
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Puedes agregar más tarjetas aquí si lo deseas -->
         </div>
     @else
         <div class="alert alert-success text-center rounded-4 shadow-sm mb-4">

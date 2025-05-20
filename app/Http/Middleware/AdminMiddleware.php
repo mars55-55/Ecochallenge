@@ -16,9 +16,9 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || !Auth::user()->isAdmin()) {
-            abort(403, 'No autorizado');
+        if (auth()->check() && auth()->user()->isAdmin()) {
+            return $next($request);
         }
-        return $next($request);
+        abort(403, 'No autorizado');
     }
 }

@@ -14,7 +14,6 @@ use App\Http\Controllers\ManualActionController;
 use App\Http\Controllers\HabitEvaluationController;
 use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\AnalysisController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,10 +25,10 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/dashboard', function () {
-    return view('dashboard'); // Siempre muestra dashboard.blade.php para todos los usuarios
+    return view('dashboard');
 })->middleware('auth')->name('dashboard');
 
-// Rutas autenticadas
+// Rutas autenticadas para usuarios normales
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -50,20 +49,24 @@ Route::middleware(['auth'])->group(function () {
     // Evaluación de hábitos
     Route::get('habit-evaluation', [HabitEvaluationController::class, 'form'])->name('habit_evaluation.form');
     Route::post('habit-evaluation', [HabitEvaluationController::class, 'submit'])->name('habit_evaluation.submit');
-    // Panel admin
-    Route::middleware('admin')->group(function () {
-        Route::get('admin', [AdminPanelController::class, 'index'])->name('admin.index');
-        Route::get('admin/reports/{user}', [ReportController::class, 'generateUserReport'])->name('admin.report.user');
-        // Acciones de administración de retos
-        Route::resource('challenges', ChallengeController::class)->except(['index', 'show']);
-        Route::post('challenges/{challenge}/complete', [ChallengeUserController::class, 'complete'])->name('challenges.complete');
-        // Eliminar temas y comentarios solo admin
-        Route::delete('topics/{topic}', [TopicController::class, 'destroy'])->name('topics.destroy');
-        Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-    });
+    // Métricas y análisis
     Route::get('metrics/history', [UserMetricController::class, 'history'])->name('metrics.history');
     Route::get('analysis', [AnalysisController::class, 'index'])->name('analysis.index');
     Route::get('mi-reporte', [ReportController::class, 'downloadMyReport'])->name('user.report.download');
+});
+
+// Panel admin (solo para administradores)
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('admin', [AdminPanelController::class, 'index'])->name('admin.index');
+    Route::get('admin/reports/{user}', [ReportController::class, 'generateUserReport'])->name('admin.report.user');
+    Route::get('admin/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.reports');
+    Route::get('admin/users', [AdminPanelController::class, 'users'])->name('admin.users');
+    // Acciones de administración de retos
+    Route::resource('challenges', ChallengeController::class)->except(['index', 'show']);
+    Route::post('challenges/{challenge}/complete', [ChallengeUserController::class, 'complete'])->name('challenges.complete');
+    // Eliminar temas y comentarios solo admin
+    Route::delete('topics/{topic}', [TopicController::class, 'destroy'])->name('topics.destroy');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 require __DIR__.'/auth.php';

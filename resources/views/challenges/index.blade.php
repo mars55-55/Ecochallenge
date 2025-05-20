@@ -10,7 +10,7 @@
         <span style="width: 40px;"></span> <!-- Espaciador visual -->
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @foreach($challenges as $challenge)
+        @forelse($challenges as $challenge)
             <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col border-t-4 border-green-400 hover:shadow-2xl transition-shadow duration-200">
                 <h3 class="text-xl font-semibold mb-2 text-green-700 flex items-center gap-2">
                     <i class="bi bi-tree-fill"></i> {{ $challenge->title }}
@@ -19,7 +19,11 @@
                 <p class="text-gray-600 mb-4">{{ $challenge->description }}</p>
                 <a href="{{ route('challenges.show', $challenge) }}" class="mt-auto btn btn-success rounded-pill w-full">Ver detalle</a>
             </div>
-        @endforeach
+        @empty
+            <div class="col-12 text-center py-5">
+                <span class="text-muted">No hay retos ecológicos disponibles por ahora.</span>
+            </div>
+        @endforelse
     </div>
 </div>
 @endsection

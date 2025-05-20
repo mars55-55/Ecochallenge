@@ -15,6 +15,26 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         <span class="eco-accent font-semibold">{{ __('Dashboard') }}</span>
                     </x-nav-link>
+
+                    @auth
+                    @if(Auth::user()->isAdmin())
+                        <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
+                            <span class="eco-accent font-semibold">Panel Admin</span>
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')">
+                            <span class="eco-accent font-semibold">Reportes</span>
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
+                            <span class="eco-accent font-semibold">Usuarios</span>
+                        </x-nav-link>
+                        <x-nav-link :href="route('challenges.create')" :active="request()->routeIs('challenges.create')">
+                            <span class="eco-accent font-semibold">Crear Reto</span>
+                        </x-nav-link>
+                        <x-nav-link :href="route('survey.create')" :active="request()->routeIs('survey.create')">
+                            <span class="eco-accent font-semibold">Crear Encuesta</span>
+                        </x-nav-link>
+                    @endif
+                    @endauth
                 </div>
             </div>
 
@@ -69,6 +89,25 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 <span class="eco-accent font-semibold">{{ __('Dashboard') }}</span>
             </x-responsive-nav-link>
+            @auth
+            @if(Auth::user()->isAdmin())
+                <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
+                    <span class="eco-accent font-semibold">Panel Admin</span>
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')">
+                    <span class="eco-accent font-semibold">Reportes</span>
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
+                    <span class="eco-accent font-semibold">Usuarios</span>
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('challenges.create')" :active="request()->routeIs('challenges.create')">
+                    <span class="eco-accent font-semibold">Crear Reto</span>
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('survey.create')" :active="request()->routeIs('survey.create')">
+                    <span class="eco-accent font-semibold">Crear Encuesta</span>
+                </x-responsive-nav-link>
+            @endif
+            @endauth
         </div>
 
         <!-- Responsive Settings Options -->

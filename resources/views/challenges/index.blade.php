@@ -7,7 +7,13 @@
             <i class="bi bi-arrow-left"></i> Volver al inicio
         </a>
         <h1 class="fw-bold text-success mb-0 flex-grow-1 text-center"><i class="bi bi-tree-fill"></i> Retos ecológicos</h1>
-        <span style="width: 40px;"></span> <!-- Espaciador visual -->
+        @if(Auth::user() && Auth::user()->isAdmin())
+            <a href="{{ route('challenges.create') }}" class="btn btn-success rounded-pill shadow-sm">
+                <i class="bi bi-plus-circle"></i> Crear reto
+            </a>
+        @else
+            <span style="width: 40px;"></span> <!-- Espaciador visual -->
+        @endif
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @forelse($challenges as $challenge)

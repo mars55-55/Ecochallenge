@@ -34,11 +34,9 @@
                             <a href="{{ route('survey.form') }}" class="btn btn-outline-success rounded-pill shadow-sm">Gestionar Formularios</a>
                             <a href="{{ route('admin.reports') }}" class="btn btn-outline-info rounded-pill shadow-sm">Gestionar Reportes</a>
                             <a href="{{ route('admin.users') }}" class="btn btn-outline-warning rounded-pill shadow-sm">Gestionar Usuarios</a>
-                            @if(auth()->user() && auth()->user()->isAdmin())
-                                <a href="{{ route('challenges.create') }}" class="btn btn-success rounded-pill">
-                                    <i class="bi bi-plus-circle"></i> Crear reto
-                                </a>
-                            @endif
+                            <a href="{{ route('challenges.create') }}" class="btn btn-success rounded-pill">
+                                <i class="bi bi-plus-circle"></i> Crear reto
+                            </a>
                         </div>
                         <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
                             <a href="{{ route('survey.create') }}" class="btn btn-outline-primary rounded-pill shadow-sm">

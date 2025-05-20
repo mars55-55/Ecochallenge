@@ -13,8 +13,8 @@ class AdminPanelController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        return view('admin.index', compact('users'));
+        // Mostrar el dashboard en vez de una vista admin.index
+        return view('dashboard');
     }
 
     public function users()

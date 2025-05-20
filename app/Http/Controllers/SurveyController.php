@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class SurveyController extends Controller
 {
     public function form() {
-        $survey = Survey::first(); // Solo una encuesta de ejemplo
-        return view('surveys.form', compact('survey'));
+        $surveys = \App\Models\Survey::whereNotNull('questions')->get();
+        return view('surveys.form', compact('surveys'));
     }
 
     public function submit(Request $request) {

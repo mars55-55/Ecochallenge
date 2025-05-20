@@ -4,7 +4,10 @@
 @section('content')
 <div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="card shadow-lg w-100" style="max-width: 550px;">
-        <div class="card-header bg-success text-white text-center">
+        <div class="card-header bg-success text-white text-center position-relative">
+            <a href="{{ route('challenges.index') }}" class="btn btn-outline-light position-absolute start-0 top-50 translate-middle-y ms-3">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
             <h2 class="mb-0">Editar Reto Ecológico</h2>
         </div>
         <div class="card-body">

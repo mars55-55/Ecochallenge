@@ -35,7 +35,9 @@
                                         <option value="text" @if(($q['type'] ?? '')=='text') selected @endif>Respuesta abierta</option>
                                         <option value="select" @if(($q['type'] ?? '')=='select') selected @endif>Opción múltiple</option>
                                     </select>
-                                    <input type="text" name="questions[{{ $i }}][options]" class="form-control mb-2 question-options" placeholder="Opciones (separadas por coma)" value="{{ isset($q['options']) ? implode(',', $q['options']) : '' }}" @if(($q['type'] ?? '')!='select') style="display:none;" @endif>
+                                    <input type="text" name="questions[{{ $i }}][options]" class="form-control mb-2 question-options" placeholder="Opciones (separadas por coma)"
+                                        value="{{ isset($q['options']) ? (is_array($q['options']) ? implode(',', $q['options']) : $q['options']) : '' }}"
+                                        @if(($q['type'] ?? '')!='select') style="display:none;" @endif>
                                 </div>
                                 <button type="button" class="btn btn-danger btn-sm remove-question">Eliminar</button>
                             </div>

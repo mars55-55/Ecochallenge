@@ -13,11 +13,14 @@ class AnalysisController extends Controller
     {
         $user = Auth::user();
 
-        // Encuestas: promedio de satisfacción
+        // Encuestas: promedio de satisfacción (primera pregunta de cada respuesta)
         $surveyResponses = SurveyResponse::where('user_id', $user->id)->get();
         $satisfaccionAvg = $surveyResponses->pluck('responses')->map(function($resp) {
             $data = json_decode($resp, true);
-            return isset($data['satisfaccion']) ? (int)$data['satisfaccion'] : null;
+            // Busca la respuesta a la primera pregunta (índice 0)
+            return isset($data['questions'][0]) && is_numeric($data['questions'][0])
+                ? (int)$data['questions'][0]
+                : null;
         })->filter()->avg();
 
         // Acciones manuales: cantidad total

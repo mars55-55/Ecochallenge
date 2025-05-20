@@ -5,7 +5,10 @@
     <div class="mb-3">
         <a href="/" class="btn btn-outline-secondary rounded-pill"><i class="bi bi-house-door"></i> Volver a inicio</a>
     </div>
-    @php $user = Auth::user(); @endphp
+    @php
+        $user = Auth::user();
+    @endphp
+
     @if($user && $user->isAdmin())
         <div class="alert alert-info text-center rounded-4 shadow-sm mb-4">
             <i class="bi bi-stars"></i> <strong>¡Bienvenido, Administrador!</strong> Tu liderazgo impulsa el cambio sostenible en toda la comunidad. Gestiona, inspira y haz crecer el impacto ecológico.
@@ -46,10 +49,13 @@
                     </div>
                 </div>
             </div>
-            <!-- Puedes agregar más tarjetas aquí si lo deseas -->
         </div>
         <!-- Notificación visual de reportes pendientes -->
-        @php $pendingReports = \App\Models\Report::count(); @endphp
+        @php
+            // Si tienes un campo 'status' para reportes pendientes, úsalo:
+            // $pendingReports = \App\Models\Report::where('status', 'pendiente')->count();
+            $pendingReports = \App\Models\Report::count();
+        @endphp
         @if($pendingReports > 0)
             <div class="alert alert-warning text-center rounded-4 shadow-sm mb-4">
                 <i class="bi bi-flag"></i> Hay <strong>{{ $pendingReports }}</strong> reportes pendientes de revisión.
@@ -66,13 +72,26 @@
                 <p class="lead text-muted">Sigue avanzando y celebra cada logro ecológico. ¡Cada acción cuenta!</p>
             </div>
         </div>
+        @php
+            $totalAssigned = $user->challenges()->count();
+            $totalCompleted = $user->challenges()->wherePivotNotNull('completed_at')->count();
+            $percentCompleted = $totalAssigned > 0 ? round(($totalCompleted / $totalAssigned) * 100) : 0;
+
+            $totalCo2 = $user->metrics()->sum('co2_saved');
+            $totalWater = $user->metrics()->sum('water_saved');
+            $totalWaste = $user->metrics()->sum('waste_avoided');
+
+            $manualActions = $user->manualActions()->count();
+            $lastHabit = $user->habitEvaluations()->latest()->first();
+        @endphp
         <div class="row g-4 mb-4 justify-content-center">
             <div class="col-md-3">
                 <div class="card shadow border-0 rounded-4 text-center h-100">
                     <div class="card-body py-4">
                         <div class="mb-2"><i class="bi bi-award-fill text-warning" style="font-size:2.2rem;"></i></div>
                         <h5 class="fw-semibold">Retos Completados</h5>
-                        <div class="display-5 fw-bold text-success">{{ Auth::user()->challenges()->wherePivotNotNull('completed_at')->count() }}</div>
+                        <div class="display-5 fw-bold text-success">{{ $totalCompleted }}</div>
+                        <small class="text-muted">{{ $percentCompleted }}% de tus retos asignados completados</small>
                     </div>
                 </div>
             </div>
@@ -81,7 +100,10 @@
                     <div class="card-body py-4">
                         <div class="mb-2"><i class="bi bi-cloud-arrow-down-fill text-info" style="font-size:2.2rem;"></i></div>
                         <h5 class="fw-semibold">CO₂ Ahorrado</h5>
-                        <div class="display-6 fw-bold">{{ Auth::user()->metrics()->sum('co2_saved') }} <span class="fs-5">kg</span></div>
+                        <div class="display-6 fw-bold">{{ $totalCo2 }} <span class="fs-5">kg</span></div>
+                        @if($totalCo2 == 0)
+                            <small class="text-muted">¡Comienza a registrar tus acciones!</small>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -90,7 +112,10 @@
                     <div class="card-body py-4">
                         <div class="mb-2"><i class="bi bi-droplet-half text-primary" style="font-size:2.2rem;"></i></div>
                         <h5 class="fw-semibold">Agua Conservada</h5>
-                        <div class="display-6 fw-bold">{{ Auth::user()->metrics()->sum('water_saved') }} <span class="fs-5">L</span></div>
+                        <div class="display-6 fw-bold">{{ $totalWater }} <span class="fs-5">L</span></div>
+                        @if($totalWater == 0)
+                            <small class="text-muted">¡Ahorra agua y suma puntos!</small>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -99,7 +124,10 @@
                     <div class="card-body py-4">
                         <div class="mb-2"><i class="bi bi-recycle text-success" style="font-size:2.2rem;"></i></div>
                         <h5 class="fw-semibold">Residuos Evitados</h5>
-                        <div class="display-6 fw-bold">{{ Auth::user()->metrics()->sum('waste_avoided') }} <span class="fs-5">kg</span></div>
+                        <div class="display-6 fw-bold">{{ $totalWaste }} <span class="fs-5">kg</span></div>
+                        @if($totalWaste == 0)
+                            <small class="text-muted">¡Evita residuos y ayuda al planeta!</small>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -133,7 +161,7 @@
                             </div>
                             <div class="col-12">
                                 <a href="{{ route('manual-actions.index') }}" class="btn btn-outline-primary btn-lg w-100 rounded-pill shadow-sm d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-list-check me-2"></i> Mis Acciones
+                                    <i class="bi bi-list-check me-2"></i> Mis Acciones ({{ $manualActions }})
                                 </a>
                                 <small class="text-muted d-block text-center">Consulta tu historial de acciones ecológicas.</small>
                             </div>
@@ -182,6 +210,15 @@
                 </div>
             </div>
         </div>
+        @if($lastHabit)
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <div class="alert alert-info mt-3 mb-0 rounded-4 shadow-sm">
+                        <i class="bi bi-clipboard-check"></i> Última evaluación de hábitos: <strong>{{ number_format($lastHabit->carbon_footprint, 2) }}</strong> kg CO₂
+                    </div>
+                </div>
+            </div>
+        @endif
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">
                 <div class="alert alert-success mt-3 mb-0 rounded-4 shadow-sm">

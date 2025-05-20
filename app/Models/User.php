@@ -68,5 +68,12 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    
+    public function manualActions()
+    {
+        return $this->hasMany(\App\Models\ManualAction::class);
+    }
+    public function habitEvaluations()
+    {
+        return $this->hasMany(\App\Models\HabitEvaluation::class);
+    }
 }

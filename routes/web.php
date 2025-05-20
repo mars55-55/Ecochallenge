@@ -38,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('topics', TopicController::class);
     // Solo index y show para todos los usuarios autenticados
-    Route::resource('challenges', ChallengeController::class)->only(['index', 'show']);
+    Route::resource('challenges', ChallengeController::class);
     Route::post('topics/{topic}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('topics/{topic}/reactions', [ReactionController::class, 'store'])->name('reactions.store');
     Route::post('topics/{topic}/report', [ReportController::class, 'store'])->name('topics.report');
@@ -49,14 +49,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('survey', [SurveyController::class, 'submit'])->name('survey.submit');
     // Acciones manuales
     Route::resource('manual-actions', ManualActionController::class)->only(['index', 'create', 'store']);
+    Route::resource('challenges', ChallengeController::class);
     // Rutas de administración de retos solo para admin (crear, editar, eliminar)
-    Route::middleware('is.admin')->group(function () {
-        Route::get('challenges/create', [ChallengeController::class, 'create'])->name('challenges.create');
-        Route::post('challenges', [ChallengeController::class, 'store'])->name('challenges.store');
-        Route::get('challenges/{challenge}/edit', [ChallengeController::class, 'edit'])->name('challenges.edit');
-        Route::put('challenges/{challenge}', [ChallengeController::class, 'update'])->name('challenges.update');
-        Route::delete('challenges/{challenge}', [ChallengeController::class, 'destroy'])->name('challenges.destroy');
-    });
     // Evaluación de hábitos
     Route::get('habit-evaluation', [HabitEvaluationController::class, 'form'])->name('habit_evaluation.form');
     Route::post('habit-evaluation', [HabitEvaluationController::class, 'submit'])->name('habit_evaluation.submit');
